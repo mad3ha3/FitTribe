@@ -8,36 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var viewModel: AuthViewModel
+    
     var body: some View {
-        ZStack {
-            // MARK: Background
-            
-            
-            
-            // MARK: Content
-            VStack (alignment: .leading, spacing: 15) {
-                //app name
-                Text("FitTribe")
-                
-                //slogan
-                Text("get FiTogether")
-                
-                
-                //Get Started
-                Button( action: {
-                    
-                },
-                        label: {
-                    Text("get started")
-                }
-                )
-            }
+        Group {
+            if viewModel.userSession != nil {
+                ProfileView() //shows this when the user is logged in and the usersession is populated with data
+            } else {
+                LoginView() //shows this when the user is not logged in 
             }
         }
-    
-    
+    }
 }
+        #Preview {
+            ContentView()
+        }
 
-#Preview {
-    ContentView()
-}

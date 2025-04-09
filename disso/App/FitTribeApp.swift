@@ -6,17 +6,20 @@
 //
 
 import SwiftUI
-//import Firebase  // Optional if you're using Firebase now
+import Firebase
 
 @main
 struct FitTribeApp: App {
-    init() {
-        // Optional: FirebaseApp.configure() if you have Firebase installed
-    }
+    @StateObject var viewModel = AuthViewModel()
 
+    init() {
+        FirebaseApp.configure()
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()  // Replace with LoginView() or MainView() if needed
+            ContentView() // Replace with LoginView() or MainView() if needed
+                .environmentObject(viewModel)
         }
     }
 }

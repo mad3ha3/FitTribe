@@ -10,7 +10,7 @@ import SwiftUI
 struct LoginView: View {
     @State private var email = ""
     @State private var password = ""
-
+    @EnvironmentObject var viewModel: AuthViewModel
     var body: some View {
         NavigationStack {
             VStack {
@@ -25,7 +25,7 @@ struct LoginView: View {
                 VStack(spacing: 25) {
                     InputView(text: $email,
                               title: "Email Address",
-                              placeholder: "name@eample.com")
+                              placeholder: "name@example.com")
                     .autocapitalization(.none) //avoids capitalising email field accidentally
                     InputView(text: $password,
                               title: "Password",
@@ -39,7 +39,9 @@ struct LoginView: View {
                 //sign in button
                 
                 Button {
-                    print("Log user in..")
+                    Task {
+                        try await viewModel.signIn(withEmail: email, password: password)
+                    }
                 } label: {
                     HStack {
                         Text("Sign In")
@@ -50,12 +52,16 @@ struct LoginView: View {
                     .frame(width: UIScreen.main.bounds.width - 32, height: 48)
                 }
                 .background(Color(.systemOrange))
+                .disabled(!formIsValid)
+                .opacity(formIsValid ? 1.0 : 0.5)
                 .cornerRadius(20)
                 .padding(.top, 20)
             
                 
                 Spacer()
                 
+
+
                 //sign up button
                 
                 NavigationLink {
@@ -72,6 +78,19 @@ struct LoginView: View {
             }
         }
     }
+}
+
+//MARK: - AuthenticationFormProtocol
+
+extension LoginView: AuthenticationFormProtocol{
+    var formIsValid: Bool {
+        return !email.isEmpty
+        && email.contains("@")
+        && !password.isEmpty
+        && password.count > 5
+    }
+    
+    
 }
 
 #Preview {

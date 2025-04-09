@@ -8,59 +8,61 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @EnvironmentObject var viewModel: AuthViewModel
     var body: some View {
-        List {
-            Section{
-                HStack {
-                    Text("UN")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .frame(width:72, height: 72)
-                        .background(Color(.systemOrange))
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                    
-                    VStack(alignment: .leading, spacing: 4){
-                        Text("User Name")
-                            .fontWeight(.semibold)
-                            .font(.subheadline)
-                            .padding(.top, 4)
+        if let user = viewModel.currentUser{
+            List {
+                Section{
+                    HStack {
+                        Text(user.intials)
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .frame(width:72, height: 72)
+                            .background(Color(.systemOrange))
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
                         
-                        Text("test@gmail.com")
-                            .font(.footnote)
-                            .accentColor(.black)
+                        VStack(alignment: .leading, spacing: 4){
+                            Text(user.fullname)
+                                .fontWeight(.semibold)
+                                .font(.subheadline)
+                                .padding(.top, 4)
+                            
+                            Text(user.email)
+                                .font(.footnote)
+                                .foregroundColor(.gray)
+                        }
                     }
                 }
-            }
-            Section("Account") {
-                Button{
-                    print("Sign out..")
-                } label: {
-                    HStack(spacing: 12){
-                        Image(systemName: "arrow.left.circle.fill")
+                Section("Account") {
+                    Button{
+                        viewModel.signOut()
+                    } label: {
+                        HStack(spacing: 12){
+                            Image(systemName: "arrow.left.circle.fill")
                                 .imageScale(.small)
                                 .font(.title)
                                 .foregroundColor(.red)
-                        Text("Sign Out")
-                            .font(.subheadline)
-                            .foregroundColor(.black)
+                            Text("Sign Out")
+                                .font(.subheadline)
+                                .foregroundColor(.black)
+                        }
                     }
-                }
-                Button{
-                    print("Delete account..")
-                } label: {
-                    HStack(spacing: 12){
-                        Image(systemName: "xmark.circle.fill")
+                   /* Button{
+                        print("Delete account..")
+                    } label: {
+                        HStack(spacing: 12){
+                            Image(systemName: "xmark.circle.fill")
                                 .imageScale(.small)
                                 .font(.title)
                                 .foregroundColor(.red)
-                        Text("Delete Account")
-                            .font(.subheadline)
-                            .foregroundColor(.black)
-                    }
+                            Text("Delete Account")
+                                .font(.subheadline)
+                                .foregroundColor(.black)
+                        }
+                    } */
                 }
             }
-            
         }
     }
 }
