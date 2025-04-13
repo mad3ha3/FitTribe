@@ -48,19 +48,6 @@ struct ProfileView: View {
                                 .foregroundColor(.black)
                         }
                     }
-                   /* Button{
-                        print("Delete account..")
-                    } label: {
-                        HStack(spacing: 12){
-                            Image(systemName: "xmark.circle.fill")
-                                .imageScale(.small)
-                                .font(.title)
-                                .foregroundColor(.red)
-                            Text("Delete Account")
-                                .font(.subheadline)
-                                .foregroundColor(.black)
-                        }
-                    } */
                 }
             }
         }
