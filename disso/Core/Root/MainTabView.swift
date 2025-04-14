@@ -10,10 +10,10 @@ import SwiftUI
 struct MainTabView: View {
     var body: some View {
         TabView {
-            LeaderboardView()
+            HomeView()
                 .tabItem {
-                    Image(systemName: "trophy.fill")
-                    Text("Leaderboard")
+                    Image(systemName: "house.fill")
+                    Text("Home")
                 }
             
             WorkoutLogView()
@@ -21,6 +21,13 @@ struct MainTabView: View {
                     Image(systemName: "figure.walk")
                     Text("Workout")
                 }
+            
+            LeaderboardView()
+                .tabItem {
+                    Image(systemName: "trophy.fill")
+                    Text("Leaderboard")
+                }
+        
             
             ChatView()
                 .tabItem {

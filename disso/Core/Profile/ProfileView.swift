@@ -6,54 +6,76 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct ProfileView: View {
-    @EnvironmentObject var viewModel: AuthViewModel
+    @State private var showingSignOutAlert = false
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var authViewModel: AuthViewModel
+    
     var body: some View {
-        if let user = viewModel.currentUser{
+        NavigationStack {
             List {
-                Section{
-                    HStack {
-                        Text(user.intials)
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .frame(width:72, height: 72)
-                            .background(Color(.systemOrange))
-                            .clipShape(RoundedRectangle(cornerRadius: 20))
-                        
-                        VStack(alignment: .leading, spacing: 4){
+                // User Info Section
+                Section("Personal Information") {
+                    if let user = authViewModel.currentUser {
+                        VStack(alignment: .leading, spacing: 8) {
                             Text(user.fullname)
-                                .fontWeight(.semibold)
-                                .font(.subheadline)
-                                .padding(.top, 4)
+                                .font(.headline)
                             
                             Text(user.email)
-                                .font(.footnote)
+                                .font(.subheadline)
                                 .foregroundColor(.gray)
                         }
                     }
                 }
-                Section("Account") {
-                    Button{
-                        viewModel.signOut()
+                
+                // Actions Section
+                Section {
+                    // Sign Out Button
+                    Button(role: .destructive) {
+                        showingSignOutAlert = true
                     } label: {
-                        HStack(spacing: 12){
-                            Image(systemName: "arrow.left.circle.fill")
-                                .imageScale(.small)
-                                .font(.title)
-                                .foregroundColor(.red)
+                        HStack {
                             Text("Sign Out")
-                                .font(.subheadline)
-                                .foregroundColor(.black)
+                            Spacer()
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
                         }
                     }
                 }
             }
+            .navigationTitle("Profile")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundStyle(.blue)
+                    }
+                }
+            }
+            .alert("Sign Out", isPresented: $showingSignOutAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Sign Out", role: .destructive) {
+                    signOut()
+                }
+            } message: {
+                Text("Are you sure you want to sign out?")
+            }
         }
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+    }
+    
+    private func signOut() {
+        authViewModel.signOut()
+        dismiss()
     }
 }
 
 #Preview {
     ProfileView()
+        .environmentObject(AuthViewModel())
 }

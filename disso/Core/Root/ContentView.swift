@@ -13,7 +13,7 @@ struct ContentView: View {
     var body: some View {
         Group {
             if viewModel.userSession != nil {
-                ProfileView() //shows this when the user is logged in and the usersession is populated with data
+                MainTabView() //shows this when the user is logged in and the usersession is populated with data
             } else {
                 LoginView() //shows this when the user is not logged in 
             }

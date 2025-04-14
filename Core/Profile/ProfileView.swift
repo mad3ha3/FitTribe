@@ -3,12 +3,11 @@ import FirebaseAuth
 
 struct ProfileView: View {
     @State private var showingSignOutAlert = false
-    @State private var showingDeleteAccountAlert = false
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var authViewModel: AuthViewModel
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 // User Info Section
                 Section("Personal Information") {
@@ -36,20 +35,20 @@ struct ProfileView: View {
                             Image(systemName: "rectangle.portrait.and.arrow.right")
                         }
                     }
-                    
-                    // Delete Account Button
-                    Button(role: .destructive) {
-                        showingDeleteAccountAlert = true
-                    } label: {
-                        HStack {
-                            Text("Delete Account")
-                            Spacer()
-                            Image(systemName: "person.crop.circle.badge.minus")
-                        }
-                    }
                 }
             }
             .navigationTitle("Profile")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundStyle(.blue)
+                    }
+                }
+            }
             .alert("Sign Out", isPresented: $showingSignOutAlert) {
                 Button("Cancel", role: .cancel) { }
                 Button("Sign Out", role: .destructive) {
@@ -58,28 +57,14 @@ struct ProfileView: View {
             } message: {
                 Text("Are you sure you want to sign out?")
             }
-            .alert("Delete Account", isPresented: $showingDeleteAccountAlert) {
-                Button("Cancel", role: .cancel) { }
-                Button("Delete", role: .destructive) {
-                    deleteAccount()
-                }
-            } message: {
-                Text("Are you sure you want to delete your account? This action cannot be undone.")
-            }
         }
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
     }
     
     private func signOut() {
         authViewModel.signOut()
         dismiss()
-    }
-    
-    private func deleteAccount() {
-        authViewModel.deleteAccount { success in
-            if success {
-                dismiss()
-            }
-        }
     }
 }
 
