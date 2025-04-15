@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+//View for user login, email and password fields w validation
 struct LoginView: View {
     @State private var email = ""
     @State private var password = ""
@@ -14,7 +16,7 @@ struct LoginView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                //image
+                //image, app logo
                 Image("AppIcon")
                     .resizable()
                     .scaledToFill()
@@ -62,7 +64,7 @@ struct LoginView: View {
                 
 
 
-                //sign up button
+                //navigation to sign up 
                 
                 NavigationLink {
                     RegistrationView()

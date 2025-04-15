@@ -8,6 +8,7 @@
 import SwiftUI
 import Firebase
 
+//entry point for the app, configures the firebase
 @main
 struct FitTribeApp: App {
     @StateObject var viewModel = AuthViewModel()
@@ -18,6 +19,7 @@ struct FitTribeApp: App {
     
     var body: some Scene {
         WindowGroup {
+            // this shows the content based on the user session
             ContentView() // Replace with LoginView() or MainView() if needed
                 .environmentObject(viewModel)
         }

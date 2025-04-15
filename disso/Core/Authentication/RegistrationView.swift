@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//view for account registration
 struct RegistrationView: View {
     @State private var email: String = ""
     @State private var fullname: String = ""
@@ -18,7 +19,7 @@ struct RegistrationView: View {
     var body: some View {
         VStack {
             
-            //image
+            //image, app logo
             Image("AppIcon")
                 .resizable()
                 .scaledToFill()
@@ -43,6 +44,7 @@ struct RegistrationView: View {
                           isSecureField: true)//preset this field as false
                 .autocapitalization(.none)
                 
+                //confirm password with validation icon set
                 ZStack(alignment: .trailing) {
                     InputView(text: $confirmPassword,
                               title: "Confirm Password",

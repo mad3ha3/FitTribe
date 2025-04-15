@@ -7,15 +7,16 @@
 
 import SwiftUI
 
+//this is a reusable input view component for the following text and secure text fields
 struct InputView: View {
     @Binding var text: String
-    let title: String
-    let placeholder: String
-    var isSecureField = false
+    let title: String  //label displayed above the input
+    let placeholder: String //text that is placed inside the input
+    var isSecureField = false //if the input should hide text
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12){
-            Text(title)
+            Text(title) //field title label
                 .foregroundColor(Color(.darkGray))
                 .fontWeight(.semibold)
                 .font(.footnote)

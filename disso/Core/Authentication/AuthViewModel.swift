@@ -17,10 +17,10 @@ protocol AuthenticationFormProtocol {
 
 @MainActor //need to publish all UI updates on the main thread
 class AuthViewModel: ObservableObject{
-    @Published var userSession: FirebaseAuth.User?
-    @Published var currentUser: User?
+    @Published var userSession: FirebaseAuth.User? //current firebase session
+    @Published var currentUser: User? //current user object
     
-    init(){
+    init(){ //initialises and attempts to fetch the user if already signed in
         self.userSession = Auth.auth().currentUser //when initialising it will check if there is a current user which is stored locally assisted by firebase
         
         Task{
@@ -28,7 +28,7 @@ class AuthViewModel: ObservableObject{
         }
     }
     
-    func signIn(withEmail email: String, password: String) async throws {
+    func signIn(withEmail email: String, password: String) async throws { //sign in a user
         do {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
             self.userSession = result.user
@@ -39,7 +39,9 @@ class AuthViewModel: ObservableObject{
     }
     
     //asyncronous function that potentially throws an error which is what happens in the catch block if anything goes wrong
-    func createUser(withEmail email: String, password: String, fullname: String) async throws {
+    
+    
+    func createUser(withEmail email: String, password: String, fullname: String) async throws { //creates a new user and stores their profile in firestore
         do {
             let result = try await Auth.auth().createUser(withEmail: email, password: password) //create user using firebase code, await the result of it and store it in the result property
             self.userSession = result.user // if there is a result back then it sets the userSession property
@@ -66,6 +68,7 @@ class AuthViewModel: ObservableObject{
 
     //func deleteAccount() {}
 
+    //fetches the user document from firestore and decodes into a 'User' object
     func fetchUser() async {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else { return }
