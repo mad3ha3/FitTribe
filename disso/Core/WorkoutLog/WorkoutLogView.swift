@@ -8,38 +8,45 @@
 import SwiftUI
 
 struct WorkoutLogView: View {
-    @State private var showProfile = false
+    @State private var showAddWorkout = false
+    @State private var selectedDay: WeekDay = .today
+    @StateObject private var workoutViewModel = WorkoutViewModel()
     @EnvironmentObject var authViewModel: AuthViewModel
     
     var body: some View {
-        NavigationView {
-            VStack {
-                // Your workout logging content here
-                Text("Workout Log Content")
+        NavigationStack {
+            VStack(spacing: 0) {
+                WeekdaySelector(selectedDay: $selectedDay)
+                if workoutViewModel.isLoading {
+                    ProgressView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    WorkoutListView(workouts: workoutViewModel.workouts, selectedDay: selectedDay)
+                }
             }
             .navigationTitle("Workout Log")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        showProfile.toggle()
+                        showAddWorkout.toggle()
                     } label: {
-                        Image(systemName: "person.circle")
+                        Image(systemName: "plus.circle")
                             .imageScale(.large)
                             .foregroundStyle(.blue)
                     }
                 }
             }
         }
-        .sheet(isPresented: $showProfile) {
-            ProfileView()
-                .environmentObject(authViewModel)
+        .sheet(isPresented: $showAddWorkout) {
+            AddWorkoutView(workoutViewModel: workoutViewModel)
+        }
+        .refreshable {
+            await workoutViewModel.refreshWorkouts()
         }
     }
 }
 
-
-
 #Preview {
     WorkoutLogView()
+        .environmentObject(AuthViewModel())
 }
-

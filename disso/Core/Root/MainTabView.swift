@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//main tab controller for the app
 struct MainTabView: View {
     var body: some View {
         TabView {
@@ -35,7 +36,7 @@ struct MainTabView: View {
                     Text("Chat")
                 }
         }
-        .accentColor(.blue)
+        .accentColor(.yellow)
     }
 }
 
